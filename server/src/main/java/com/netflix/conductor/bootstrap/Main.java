@@ -20,6 +20,9 @@ import com.netflix.conductor.elasticsearch.EmbeddedElasticSearchProvider;
 import com.netflix.conductor.grpc.server.GRPCServer;
 import com.netflix.conductor.grpc.server.GRPCServerProvider;
 import com.netflix.conductor.jetty.server.JettyServerProvider;
+import com.netflix.conductor.register.MetricsModule;
+import com.netflix.spectator.api.Registry;
+import com.netflix.spectator.api.Spectator;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;
@@ -31,7 +34,14 @@ import java.util.Optional;
  */
 public class Main {
 
-    public static void main(String[] args) throws Exception {
+//    Registry registry;
+
+//    @Inject
+    public static void main(String[] args
+//                            ,Registry registry
+    ) throws Exception {
+
+//        this.registry = registry;
 
         BootstrapUtil.loadConfigFile(args.length > 0 ? args[0] : System.getenv("CONDUCTOR_CONFIG_FILE"));
 
@@ -39,6 +49,11 @@ public class Main {
             System.out.println("Using log4j config " + args[1]);
             PropertyConfigurator.configure(new FileInputStream(new File(args[1])));
         }
+
+        // Add the metrics registry to the global registry
+        Injector metricsInjector = Guice.createInjector(new MetricsModule());
+        Registry registry = metricsInjector.getInstance(Registry.class);
+        Spectator.globalRegistry().add(registry);
 
         Injector bootstrapInjector = Guice.createInjector(new BootstrapModule());
         ModulesProvider modulesProvider = bootstrapInjector.getInstance(ModulesProvider.class);
