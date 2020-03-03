@@ -95,6 +95,6 @@ public class WorkflowMonitor {
 			} catch (Exception e) {
 				LOGGER.error("Error while publishing scheduled metrics", e);
 			}
-		}, 120, statsFrequencyInSeconds, TimeUnit.SECONDS);
+		}, statsFrequencyInSeconds, statsFrequencyInSeconds, TimeUnit.SECONDS);
 	}
 }

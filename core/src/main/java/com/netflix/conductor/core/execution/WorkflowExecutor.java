@@ -67,6 +67,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
+
+import com.netflix.conductor.service.WorkflowMonitor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +95,8 @@ public class WorkflowExecutor {
     private static final String className = WorkflowExecutor.class.getSimpleName();
     private final ExecutionLockService executionLockService;
 
+    private final WorkflowMonitor monitor;
+
     @Inject
     public WorkflowExecutor(
             DeciderService deciderService,
@@ -102,8 +106,8 @@ public class WorkflowExecutor {
             WorkflowStatusListener workflowStatusListener,
             ExecutionDAOFacade executionDAOFacade,
             Configuration config,
-            ExecutionLockService executionLockService
-    ) {
+            ExecutionLockService executionLockService,
+            WorkflowMonitor monitor) {
         this.deciderService = deciderService;
         this.metadataDAO = metadataDAO;
         this.queueDAO = queueDAO;
@@ -113,6 +117,7 @@ public class WorkflowExecutor {
         this.activeWorkerLastPollInSecs = config.getIntProperty("tasks.active.worker.lastpoll", 10);
         this.workflowStatusListener = workflowStatusListener;
         this.executionLockService = executionLockService;
+        this.monitor = monitor;
     }
 
     /**

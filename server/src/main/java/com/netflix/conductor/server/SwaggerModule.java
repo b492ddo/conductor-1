@@ -16,7 +16,7 @@ public class SwaggerModule extends ServletModule {
         Map<String, String> params = new HashMap<>();
         params.put("resourceBase", getResourceBasePath());
         params.put("redirectWelcome", "true");
-        serve("/*").with(DefaultServlet.class, params);
+        serve("/swagger/*").with(DefaultServlet.class, params);
     }
 
     private String getResourceBasePath() {

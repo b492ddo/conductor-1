@@ -85,6 +85,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import com.netflix.conductor.service.WorkflowMonitor;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -129,7 +131,8 @@ public class TestWorkflowExecutor {
 
         DeciderService deciderService = new DeciderService(parametersUtils, metadataDAO, externalPayloadStorageUtils, taskMappers, config);
         MetadataMapperService metadataMapperService = new MetadataMapperService(metadataDAO);
-        workflowExecutor = new WorkflowExecutor(deciderService, metadataDAO, queueDAO, metadataMapperService, workflowStatusListener, executionDAOFacade, config, executionLockService);
+        WorkflowMonitor workflowMonitor = new WorkflowMonitor(metadataDAO, queueDAO, executionDAOFacade, config);
+        workflowExecutor = new WorkflowExecutor(deciderService, metadataDAO, queueDAO, metadataMapperService, workflowStatusListener, executionDAOFacade, config, executionLockService, workflowMonitor);
     }
 
     @Test
