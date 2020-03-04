@@ -10,6 +10,7 @@ dependencies {
 
 	compile "com.sun.jersey.contribs.jersey-oauth:oauth-client:${revOauthClient}"
 	compile "com.sun.jersey.contribs.jersey-oauth:oauth-signature:${revOauthSignature}"
+	compile group: 'org.apache.kafka', name: 'kafka-clients', version: '2.4.0'
 
 	compile "io.nats:java-nats-streaming:${revNatsStreaming}"
 
